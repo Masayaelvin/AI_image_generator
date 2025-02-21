@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+   
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title text-center">🚀 AI Image Generator</h1>
+        <p class="subtitle text-center">Create stunning AI-generated images with a simple prompt</p>
+
+    
+        <!-- Form -->
+        <form method="POST" id="imageForm" class="text-center">
+            <div class="form-container">
+                <input type="text" id="prompt" name="prompt" class="form-control prompt-input" placeholder="Enter your prompt (max 50 chars)" maxlength="50" required>
+                <button type="submit" class="btn btn-generate">✨ Generate Image</button>
+            </div>
+        </form>
+
+
+        <!-- Error Message -->
+        {% if error_message %}
+            <div class="alert alert-danger mt-3">{{ error_message }}</div>
+        {% endif %}
+
+        <!-- Loading Animation (Hidden Initially) -->
+        <div id="loadingContainer" class="text-center mt-4" style="display: none;">
+            <div class="loading-animation"></div>
+            <p class="loading-text">Generating your image...</p>
+        </div>
+
+        <!-- Image Display -->
+        <div id="imageContainer" class="text-center mt-4" {% if not image_data %}style="display: none;"{% endif %}>
+            <h2 class="generated-title">✨ Your AI-Generated Image</h2>
+            <div class="image-frame">
+                {% if image_data %}
+                    <img id="generatedImage" src="{{ image_data.url }}" alt="Generated Image" class="img-fluid">
+                {% else %}
+                    <img id="generatedImage" src="" alt="Generated Image" class="img-fluid" style="display: none;">
+                {% endif %}
+            </div>
+            <p><strong>Prompt:</strong> <span id="imagePrompt">{% if image_data %}{{ image_data.prompt }}{% endif %}</span></p>
+            <p><strong>Resolution:</strong> <span id="imageResolution">{% if image_data %}{{ image_data.width }} x {{ image_data.height }}{% endif %}</span></p>
+            <p><strong>Inference Time:</strong> <span id="imageTiming">{% if image_data %}{{ image_data.timing }} sec{% endif %}</span></p>
+
+            <!-- Download Button -->
+            {% if image_data %}
+                <a id="downloadBtn" href="{{ image_data.url }}" download="AI_Generated_Image.jpg" class="btn btn-download">📥 Download Image</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById("imageForm").addEventListener("submit", function() {
+            document.getElementById("loadingContainer").style.display = "block"; // Show loading animation
+            document.getElementById("imageContainer").style.display = "none"; // Hide previous image
+        });
+    </script>
+</body>
+</html>
