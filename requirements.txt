@@ -1,0 +1,2 @@
+fal_client==0.5.9
+Flask==3.0.3
