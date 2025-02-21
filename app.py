@@ -8,6 +8,7 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 
 app = Flask(__name__)
+application = app
 
 # Function to call FAL AI API
 def generate_image(prompt):
